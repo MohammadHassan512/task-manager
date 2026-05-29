@@ -1,53 +1,164 @@
-<!DOCTYPE 
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>Task Manager</title>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono&display=swap" rel="stylesheet"/>
-<style>
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    min-height: 100vh;
-    background: #0d1117;
-    font-family: 'DM Mono', monospace;
-    color: #e6edf3;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-  }
-  h1 {
-    font-family: 'Syne', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 800;
-    color: #58a6ff;
-    margin-bottom: 0.5rem;
-    letter-spacing: -0.5px;
-  }
-  .subtitle {
-    color: #8b949e;
-    font-size: 0.8rem;
-    margin-bottom: 2rem;
-  }
-  .input-box {
-    display: flex;
-    gap: 0.75rem;
-    width: 100%;
-    max-width: 520px;
-    margin-bottom: 1.5rem;
-  }
-  input[type="text"] {
-    flex: 1;
-    padding: 0.85rem 1.2rem;
-    background: #161b22;
-    border: 1px solid #30363d;
-    border-radius: 6px;
-    color: #e6edf3;
-    font-family: 'DM Mono', monospace;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
-  }
-  input[type="text"]:focus { border-color: #58a6ff; }
-  input[type="text"]::placeholder { color: #484
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Task Manager</title>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@800&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      background: #0d1117;
+      font-family: 'DM Mono', monospace;
+      color: #e6edf3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+    }
+    h1 {
+      font-family: 'Syne', sans-serif;
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #58a6ff;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.5px;
+    }
+    .subtitle {
+      color: #8b949e;
+      font-size: 0.8rem;
+      margin-bottom: 2rem;
+    }
+    .input-box {
+      display: flex;
+      gap: 0.75rem;
+      width: 100%;
+      max-width: 520px;
+      margin-bottom: 1.5rem;
+    }
+    input[type="text"] {
+      flex: 1;
+      padding: 0.85rem 1.2rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #e6edf3;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="text"]:focus { border-color: #58a6ff; }
+    input[type="text"]::placeholder { color: #484f58; }
+    button {
+      padding: 0.85rem 1.2rem;
+      background: #238636;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.9rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    button:hover { background: #2ea043; }
+    .task-list {
+      width: 100%;
+      max-width: 520px;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+    .task-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.85rem 1rem;
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+    }
+    .task-item.done span { text-decoration: line-through; color: #484f58; }
+    .task-item input[type="checkbox"] { accent-color: #58a6ff; cursor: pointer; }
+    .task-item span { flex: 1; font-size: 0.9rem; }
+    .del-btn {
+      background: transparent;
+      color: #f85149;
+      border: none;
+      font-size: 1rem;
+      cursor: pointer;
+      padding: 0;
+    }
+    .del-btn:hover { background: transparent; color: #ff7b72; }
+    .empty {
+      color: #484f58;
+      font-size: 0.85rem;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <h1>Task Manager</h1>
+  <p class="subtitle">by MohammadHassan512</p>
+  <div class="input-box">
+    <input type="text" id="taskInput" placeholder="Add a new task..."/>
+    <button onclick="addTask()">Add</button>
+  </div>
+  <div class="task-list" id="taskList">
+    <p class="empty" id="emptyMsg">No tasks yet. Add one above!</p>
+  </div>
+
+  <script>
+    let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+    render();
+
+    function addTask() {
+      const input = document.getElementById('taskInput');
+      const text = input.value.trim();
+      if (!text) return;
+      tasks.push({ text, done: false });
+      save(); render();
+      input.value = '';
+    }
+
+    document.getElementById('taskInput').addEventListener('keydown', e => {
+      if (e.key === 'Enter') addTask();
+    });
+
+    function toggleTask(i) {
+      tasks[i].done = !tasks[i].done;
+      save(); render();
+    }
+
+    function deleteTask(i) {
+      tasks.splice(i, 1);
+      save(); render();
+    }
+
+    function save() {
+      localStorage.setItem('tasks', JSON.stringify(tasks));
+    }
+
+    function render() {
+      const list = document.getElementById('taskList');
+      const empty = document.getElementById('emptyMsg');
+      list.innerHTML = '';
+      if (tasks.length === 0) {
+        list.appendChild(Object.assign(document.createElement('p'), {className:'empty', textContent:'No tasks yet. Add one above!'}));
+        return;
+      }
+      tasks.forEach((t, i) => {
+        const div = document.createElement('div');
+        div.className = 'task-item' + (t.done ? ' done' : '');
+        div.innerHTML = `
+          <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i})">
+          <span>${t.text}</span>
+          <button class="del-btn" onclick="deleteTask(${i})">✕</button>
+        `;
+        list.appendChild(div);
+      });
+    }
+  </script>
+</body>
+</html>
