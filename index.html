@@ -1,0 +1,53 @@
+<!DOCTYPE 
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Task Manager</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Mono&display=swap" rel="stylesheet"/>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    min-height: 100vh;
+    background: #0d1117;
+    font-family: 'DM Mono', monospace;
+    color: #e6edf3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+  }
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: #58a6ff;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+  }
+  .subtitle {
+    color: #8b949e;
+    font-size: 0.8rem;
+    margin-bottom: 2rem;
+  }
+  .input-box {
+    display: flex;
+    gap: 0.75rem;
+    width: 100%;
+    max-width: 520px;
+    margin-bottom: 1.5rem;
+  }
+  input[type="text"] {
+    flex: 1;
+    padding: 0.85rem 1.2rem;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 6px;
+    color: #e6edf3;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  input[type="text"]:focus { border-color: #58a6ff; }
+  input[type="text"]::placeholder { color: #484
